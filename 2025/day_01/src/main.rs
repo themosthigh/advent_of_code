@@ -3,22 +3,33 @@ const INPUT: &str = include_str!("../input.txt");
 fn main() {
     let mut dial = 50;
     let mut acc = 0;
+    let mut acc_abs = 0;
 
     let instructions = get_instructions();
 
-    for (command, rotation) in instructions {
+    for (index, (command, rotation)) in instructions.iter().enumerate() {
+        let initial = dial;
+
         dial = match command {
-            Command::Increment => (dial + rotation) % 100,
-            Command::Decrement => (100 + dial - rotation) % 100,
+            Command::Increment => dial + rotation,
+            Command::Decrement => dial - rotation,
             Command::Unknown => dial,
         };
 
-        if dial % 100 == 0 {
+        let _initial = ((initial as f32) / 100.0).floor();
+        let _res = (dial as f32 / 100.0).floor();
+        let diff = (_res - _initial).abs() as i32;
+
+        println!("{index}: {initial}/{rotation}={dial} ::: {diff} as {_res}-{_initial}");
+
+        acc_abs = acc_abs + diff;
+
+        if dial.abs() % 100 == 0 {
             acc = acc + 1;
         }
     }
 
-    println!("{acc}");
+    println!("acc: {acc}, abs: {acc_abs} => {}", acc + acc_abs);
 }
 
 enum Command {
@@ -46,7 +57,6 @@ fn get_instructions() -> Vec<(Command, i32)> {
         };
 
         let __in = _in[2..].join("");
-        println!("{__in}");
         let rotation = __in.parse().unwrap();
 
         instructions.push((command, rotation));
