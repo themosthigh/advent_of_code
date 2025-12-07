@@ -12,17 +12,13 @@ fn main() {
             }
         }
     }
-    println!("Acc {acc}");
+
+    println!("{acc}");
 }
 
 fn has_repeating_digits(num: u64) -> bool {
     let num_str: String = num.to_string();
     let str_len = num_str.len();
-
-    // only even length digits count
-    if str_len % 2 != 0 {
-        return false;
-    }
 
     for pairs in 1..str_len / 2 + 1 {
         let splits: Vec<&str> = num_str
@@ -34,7 +30,7 @@ fn has_repeating_digits(num: u64) -> bool {
         let first_num = splits[0];
 
         let matching_res: Vec<&&str> = splits.iter().filter(|num| **num == first_num).collect();
-        if matching_res.len() == splits.len() && splits.len() == 2 {
+        if matching_res.len() == splits.len() {
             println!(
                 "{num_str} :: {:?} len({})",
                 matching_res,
